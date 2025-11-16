@@ -1,18 +1,16 @@
 #!/bin/zsh
 set -e
 
-echo "Setting Flutter SDK path..."
-export FLUTTER_GIT_URL=https://github.com/flutter/flutter.git
-
 echo "Cloning Flutter SDK..."
 git clone https://github.com/flutter/flutter.git /Users/local/flutter
 
+# IMPORTANT: keep existing PATH
 export PATH="/Users/local/flutter/bin:$PATH"
 
-echo "Running Flutter precache..."
+echo "Flutter precache"
 flutter precache --ios
 
-echo "Running Flutter doctor..."
+echo "Flutter doctor"
 flutter doctor
 
-echo "Post clone script completed."
+echo "ci_post_clone script completed."
