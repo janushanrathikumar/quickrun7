@@ -1,0 +1,41 @@
+# Uncomment this line to define a global platform for your project
+platform :ios, '13.0'
+
+# Always use frameworks for Flutter apps
+use_frameworks!
+use_modular_headers!
+
+# ---- Flutter SDK Path Helper ----
+def flutter_root
+  generated_xcode_props = File.read(File.join(File.dirname(__FILE__), 'Flutter', 'Generated.xcconfig')) rescue nil
+  if generated_xcode_props != nil
+    props_values = Hash[generated_xcode_props.scan(/(\S+)\s*=\s*(\S+)/)]
+    return props_values['FLUTTER_ROOT']
+  end
+  raise "Could not find FLUTTER_ROOT in Generated.xcconfig. Please run 'flutter pub get'."
+end
+
+# ---- Load Flutter Pod Helper ----
+require File.join(flutter_root, 'packages', 'flutter_tools', 'bin', 'podhelper')
+
+# ---- Load Flutter Plugins ----
+plugins_file = File.join('..', '.flutter-plugins-dependencies')
+
+if File.exist?(plugins_file)
+  require plugins_file
+end
+
+target 'Runner' do
+  use_frameworks!
+  use_modular_headers!
+
+  # Install all Flutter + plugin pods
+  flutter_install_all_ios_pods File.dirname(File.realpath(__FILE__))
+end
+
+# ---- Post Install Fixes for all Pods ----
+post_install do |installer|
+  installer.pods_project.targets.each do |target|
+    flutter_additional_ios_build_settings(target)
+  end
+end
