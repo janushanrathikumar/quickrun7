@@ -8,20 +8,26 @@ echo "Cloning Flutter SDK..."
 git clone https://github.com/flutter/flutter.git --depth 1 -b stable $HOME/flutter
 export PATH="$PATH:$HOME/flutter/bin"
 
-# Run flutter doctor to confirm setup
+# --- 2. Download Flutter Engine (THE FIX) ---
+echo "Running Flutter precache for iOS..."
+# This command downloads the missing Flutter.xcframework
+flutter precache --ios
+
+# --- 3. Run Doctor (Good to check setup) ---
+echo "Running Flutter doctor..."
 flutter doctor
 
-# --- 2. Install Dependencies ---
+# --- 4. Install Dependencies ---
 echo "Installing CocoaPods..."
 brew install cocoapods
 
-# --- 3. Run Pub Get ---
+# --- 5. Run Pub Get ---
 echo "Navigating to project root to run Flutter pub get..."
-# Go from ios/ci_scripts up to the project root (quickrun7)
+# Go from ios/ci_scripts up to the project root
 cd ../..
 flutter pub get
 
-# --- 4. Run Pod Install ---
+# --- 6. Run Pod Install ---
 echo "Navigating to ios directory to run pod install..."
 # From the project root, now go back into the ios directory
 cd ios
