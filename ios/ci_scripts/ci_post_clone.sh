@@ -1,5 +1,4 @@
 #!/bin/zsh
-
 set -e
 
 echo "Setting Flutter SDK path..."
@@ -13,7 +12,7 @@ export PATH="/Users/local/flutter/bin:$PATH"
 echo "Running Flutter precache..."
 flutter precache --ios
 
-echo "Flutter doctor..."
+echo "Running Flutter doctor..."
 flutter doctor
 
-echo "Done"
+echo "Post clone script completed."
