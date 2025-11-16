@@ -1,24 +1,30 @@
-#!/bin.sh
+#!/bin/sh
 
-# Exit if any command fails
+# Fail this script if any command fails
 set -e
 
-# 1. Install Flutter
+# --- 1. Flutter Setup ---
 echo "Cloning Flutter SDK..."
 git clone https://github.com/flutter/flutter.git --depth 1 -b stable $HOME/flutter
 export PATH="$PATH:$HOME/flutter/bin"
 
-# 2. Install CocoaPods using Homebrew
+# Run flutter doctor to confirm setup
+flutter doctor
+
+# --- 2. Install Dependencies ---
 echo "Installing CocoaPods..."
 brew install cocoapods
 
-# 3. Download Flutter dependencies
-echo "Running Flutter pub get..."
+# --- 3. Run Pub Get ---
+echo "Navigating to project root to run Flutter pub get..."
+# Go from ios/ci_scripts up to the project root (quickrun7)
+cd ../..
 flutter pub get
 
-# 4. Navigate to the ios directory and run pod install
-echo "Running pod install..."
+# --- 4. Run Pod Install ---
+echo "Navigating to ios directory to run pod install..."
+# From the project root, now go back into the ios directory
 cd ios
 pod install
 
-echo "Script execution finished."
+echo "CI Post-Clone Script finished successfully."
