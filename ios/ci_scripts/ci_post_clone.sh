@@ -1,37 +1,19 @@
-#!/bin/sh
+#!/bin/zsh
 
-# Fail this script if any command fails
 set -e
 
-# --- 1. Flutter Setup ---
-echo "Cloning Flutter SDK..."
-git clone https://github.com/flutter/flutter.git --depth 1 -b stable $HOME/flutter
-export PATH="$PATH:$HOME/flutter/bin"
+echo "Setting Flutter SDK path..."
+export FLUTTER_GIT_URL=https://github.com/flutter/flutter.git
 
-# --- 2. Download Flutter Engine ---
-echo "Running Flutter precache for iOS..."
-# This command downloads the missing Flutter.xcframework
+echo "Cloning Flutter SDK..."
+git clone https://github.com/flutter/flutter.git /Users/local/flutter
+
+export PATH="/Users/local/flutter/bin:$PATH"
+
+echo "Running Flutter precache..."
 flutter precache --ios
 
-# --- 3. Run Doctor (Good to check setup) ---
-echo "Running Flutter doctor..."
+echo "Flutter doctor..."
 flutter doctor
 
-# --- 4. Install Dependencies (THE FIX) ---
-echo "Installing CocoaPods using RubyGems..."
-# 'brew' is not available, so we use the system's Ruby (gem)
-sudo gem install cocoapods
-
-# --- 5. Run Pub Get ---
-echo "Navigating to project root to run Flutter pub get..."
-# Go from ios/ci_scripts up to the project root
-cd ../..
-flutter pub get
-
-# --- 6. Run Pod Install ---
-echo "Navigating to ios directory to run pod install..."
-# From the project root, now go back into the ios directory
-cd ios
-pod install
-
-echo "CI Post-Clone Script finished successfully."
+echo "Done"
